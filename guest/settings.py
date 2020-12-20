@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap3',
     'sign',
+    # 'sign.apps.SignConfig',#另一种写法
     # 'django.contrib.admin',
 ]
 
@@ -57,7 +58,7 @@ ROOT_URLCONF = 'guest.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [], #
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,8 +78,14 @@ WSGI_APPLICATION = 'guest.wsgi.application'
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME':'guestmysql',
+        'HOST':'127.0.0.1',
+        'POST':3306,
+        'USER':'root',
+        'PASSWORD':'123456',
     }
 }
 
@@ -95,7 +102,7 @@ DATABASES = {
         'PASSWORD': '123456',
         'OPTIONS': {
             'init_command': "SET sql_mode='NO_ENGINE_SUBSTITUTION,NO_AUTO_CREATE_USER'",
-        },
+        }, # mac下的接口？
     }
 }
 '''

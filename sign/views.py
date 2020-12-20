@@ -1,5 +1,5 @@
 #coding=utf-8
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404 # shortcuts.py大类的文件引用render这个方法
 from django.http import HttpResponse, HttpResponseRedirect
 from sign.models import Event,Guest #5.2修改event_manage()视图函数#ctrl+shift+f全局搜索
 from django.contrib import auth
@@ -12,14 +12,25 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 # 首页(登录)
-def index(request):#定义index函数向客户端返回字符串
+# def index(request):#定义index函数向客户端返回字符串 # 获取登录页面
+    # request--envrion 请求相关数据 request叫做HTTPRequest对象，
+    #   请求相关数据都是request属性
     # return HttpResponse("Hello!")
-    return render(request,"index.html")
+    # return render(request,"index.html")
+    # render方法用来打开html文件 对文件进行模板渲染
+    # 第一个参数是request  第二个参数是html文件路径
+    # django会自动过去tempaltes文件夹找html文件
+    # 渲染完成之后 返回响应页面数据  最终交给wsgi中的socket  再讲页面数据返回给客户端
 
 
-# 登录动作
-def login_action(request):
-    if request.method == "POST":
+# 登录动作  # 登录功能
+# ！！优化1 获取登录页面跟处理登录写成一个函数
+def login_action(request): # 处理登录函数
+    if request.method == "GET":
+        return render(request,"index.html")
+
+    elif request.method == "POST":
+        # <QueryDict:{'username':['admin'],'password':['admin123456']}>
         # 寻找名为 "username"和"password"的POST参数，而且如果参数没有提交，返回一个空的字符串。
         username = request.POST.get("username","")
         password = request.POST.get("password","")
@@ -27,6 +38,7 @@ def login_action(request):
             return render(request,"index.html",{"error":"username or password null!"})
 
         user = auth.authenticate(username = username, password = password)
+
         if user is not None:
             auth.login(request, user) # 验证登录
             response = HttpResponseRedirect('/event_manage/') # 登录成功跳转发布会管理
